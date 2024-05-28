@@ -1,2 +1,3 @@
+
 #!/usr/bin/env bash
-python3 /veolia/veolia.py
+python3 /app/veolia/veolia.py
