@@ -9,7 +9,7 @@ COPY config.json /app/config.json
 WORKDIR /app
 
 # Installez les dépendances nécessaires
-RUN pip install requests
+RUN pip install requests xmltodict
 
 # Donnez la permission d'exécution au script
 RUN chmod +x /app/run.sh
