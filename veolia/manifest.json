@@ -1,0 +1,9 @@
+{
+    "domain": "veolia",
+    "name": "Veolia Consumption",
+    "documentation": "",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": ["requests"]
+  }
+  
