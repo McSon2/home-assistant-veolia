@@ -179,27 +179,24 @@ class VeoliaClient:
             {"cptEmail": self._email, "cptPwd": self._pwd},
             anonymous=True,
         )
-        # _LOGGER.debug(f"_get_token_password : {datas.replace(self._pwd,"MySecretPassWord")}")
+        # _LOGGER.debug(f"_get_token_password : {datas.replace(self._pwd,'MySecretPassWord')}")
         resp = self.session.post(
             self.address,
             headers=self.headers,
             data=datas,
         )
-        _LOGGER.debug(f"resp status={resp.status_code}")
+        _LOGGER.debug(f"Response status: {resp.status_code}")
+        _LOGGER.debug(f"Response body: {resp.text}")
         if resp.status_code != 200:
-            _LOGGER.error("problem with authentication")
+            _LOGGER.error("Problem with authentication")
             raise Exception(f"POST /__get_tokenPassword/ {resp.status_code}")
         else:
             result = xmltodict.parse(f"<soap:Envelope{resp.text.split('soap:Envelope')[1]}soap:Envelope>")
             _LOGGER.debug(f"result_getauth={result}")
             if check_only:
                 return None
-            self.__tokenPassword = result["soap:Envelope"]["soap:Body"]["ns2:getAuthentificationFrontResponse"][
-                "return"
-            ]["espaceClient"]["cptPwd"]
-            contrat = result["soap:Envelope"]["soap:Body"]["ns2:getAuthentificationFrontResponse"]["return"][
-                "listContrats"
-            ]
+            self.__tokenPassword = result["soap:Envelope"]["soap:Body"]["ns2:getAuthentificationFrontResponse"]["return"]["espaceClient"]["cptPwd"]
+            contrat = result["soap:Envelope"]["soap:Body"]["ns2:getAuthentificationFrontResponse"]["return"]["listContrats"]
 
             if self.__aboId == "":
                 _LOGGER.debug("No Abo_ID provided, finding first")
