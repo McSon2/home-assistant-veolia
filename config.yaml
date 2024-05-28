@@ -1,0 +1,16 @@
+name: "Veolia Consumption"
+version: "0.0.2"
+slug: "veolia_consumption"
+description: "Fetches Veolia consumption data daily."
+arch:
+  - amd64
+  - armv7
+  - aarch64
+startup: "application"
+boot: "auto"
+options:
+  username: "votre_email"
+  password: "votre_mot_de_passe"
+schema:
+  username: "str"
+  password: "str"

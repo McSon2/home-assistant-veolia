@@ -3,12 +3,13 @@ FROM python:3.9-slim
 # Copiez les fichiers nécessaires dans le conteneur
 COPY veolia /app/veolia
 COPY run.sh /app/run.sh
-COPY config.json /app/config.json
+COPY config.yaml /app/config.yaml
 
 # Définissez le répertoire de travail
 WORKDIR /app
 
 # Installez les dépendances nécessaires
+RUN apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
 RUN pip install requests xmltodict
 
 # Donnez la permission d'exécution au script
