@@ -1,0 +1,11 @@
+{
+    "name": "Veolia Consumption Add-on Repository",
+    "url": "https://github.com/McSon2/home-assistant-veolia",
+    "maintainer": "mcson",
+    "email": "maximesaltet@gmail.com",
+    "description": "Repository for Veolia Consumption Add-on",
+    "country": "FR",
+    "domain": "homeassistant",
+    "file_version": "0.0.1"
+  }
+  
