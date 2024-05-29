@@ -9,7 +9,8 @@ password = os.getenv("PASSWORD")
 print(f"USERNAME: {username}")
 print(f"PASSWORD: {password}")
 
-client = VeoliaClient(email="maximesaltet@gmail.com", password="Happy.Fifi@1994")
+#client = VeoliaClient(email="maximesaltet@gmail.com", password="Happy.Fifi@1994")
+client = VeoliaClient(email=username, password=password)
 
 # Se connecter
 try:
