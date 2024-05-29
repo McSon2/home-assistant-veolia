@@ -1,2 +1,1 @@
-def setup(hass, config):
-    return True
+# __init__.py
