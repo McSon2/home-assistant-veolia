@@ -1,7 +1,13 @@
-import json
+"""Sensor platform for Veolia."""
+
+import logging
 import os
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorStateClass
 from .veolia_client import VeoliaClient
+from .const import DAILY, DOMAIN, HISTORY, MONTHLY
+from .entity import VeoliaEntity
+
+_LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     username = os.getenv("USERNAME")
@@ -12,7 +18,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     add_entities([VeoliaDailyConsumptionSensor(client), VeoliaMonthlyConsumptionSensor(client)], True)
 
-class VeoliaDailyConsumptionSensor(Entity):
+class VeoliaDailyConsumptionSensor(VeoliaEntity):
     def __init__(self, client):
         self._client = client
         self._state = None
@@ -20,7 +26,7 @@ class VeoliaDailyConsumptionSensor(Entity):
 
     @property
     def name(self):
-        return 'Veolia Daily Consumption'
+        return 'veolia_daily_consumption_test'
 
     @property
     def state(self):
@@ -36,7 +42,7 @@ class VeoliaDailyConsumptionSensor(Entity):
             self._state = data['history'][0][1] if data['history'] else None
             self._attributes = {"history": data['history']}
 
-class VeoliaMonthlyConsumptionSensor(Entity):
+class VeoliaMonthlyConsumptionSensor(VeoliaEntity):
     def __init__(self, client):
         self._client = client
         self._state = None
@@ -44,7 +50,7 @@ class VeoliaMonthlyConsumptionSensor(Entity):
 
     @property
     def name(self):
-        return 'Veolia Monthly Consumption'
+        return 'veolia_monthly_consumption_test'
 
     @property
     def state(self):
