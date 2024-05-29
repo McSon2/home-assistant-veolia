@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
 from datetime import datetime
 
@@ -93,8 +94,8 @@ def publish_historical_data_to_hass(data):
     payload = {
         "statistic_id": "sensor.veolia_daily_consumption_test",
         "unit_of_measurement": "L",
-        "type": "recorder",
-        "stat": stats
+        "source": "recorder",
+        "stats": stats
     }
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
