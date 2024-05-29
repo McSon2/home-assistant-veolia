@@ -3,7 +3,6 @@ import os
 import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
 
-# Récupération des variables d'environnement
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 mqtt_broker = os.getenv("MQTT_BROKER")
@@ -11,7 +10,7 @@ mqtt_port = int(os.getenv("MQTT_PORT"))
 mqtt_username = os.getenv("MQTT_USERNAME")
 mqtt_password = os.getenv("MQTT_PASSWORD")
 
-# Affichage des variables pour le débogage
+# Afficher les variables d'environnement pour le débogage
 print(f"USERNAME: {username}")
 print(f"PASSWORD: {password}")
 print(f"MQTT_BROKER: {mqtt_broker}")
@@ -19,12 +18,10 @@ print(f"MQTT_PORT: {mqtt_port}")
 print(f"MQTT_USERNAME: {mqtt_username}")
 print(f"MQTT_PASSWORD: {mqtt_password}")
 
-# Initialisation du client Veolia
 client = VeoliaClient(email=username, password=password)
 
 def publish_to_mqtt(topic, payload, retain=False):
-    """Publie un message sur MQTT"""
-    mqtt_client = mqtt.Client()
+    mqtt_client = mqtt.Client(mqtt_client.CallbackAPIVersion.VERSION1)
     if mqtt_username:
         mqtt_client.username_pw_set(mqtt_username, mqtt_password)
     mqtt_client.connect(mqtt_broker, mqtt_port, 60)
@@ -32,7 +29,6 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.disconnect()
 
 def publish_discovery():
-    """Publie les messages de découverte MQTT pour Home Assistant"""
     unique_id_prefix = "veolia_test_"
     device_name = "Veolia Water Consumption"
     device = {
@@ -66,7 +62,7 @@ def publish_discovery():
         payload = json.dumps(sensor)
         publish_to_mqtt(topic, payload, retain=True)
 
-# Connexion au service Veolia et publication des données
+# Se connecter
 try:
     client.login()
     print("Connexion réussie")
@@ -74,7 +70,7 @@ try:
 except Exception as e:
     print(f"Erreur de connexion: {e}")
 
-# Récupération et publication des données de consommation journalière
+# Récupérer les données de consommation journalière
 try:
     data_daily = client.update(month=False)
     print("Données de consommation journalière :")
@@ -84,7 +80,7 @@ try:
 except Exception as e:
     print(f"Erreur lors de la récupération des données journalières: {e}")
 
-# Récupération et publication des données de consommation mensuelle
+# Récupérer les données de consommation mensuelle
 try:
     data_monthly = client.update(month=True)
     print("Données de consommation mensuelle :")
