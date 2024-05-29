@@ -1,9 +1,11 @@
 {
     "domain": "veolia",
     "name": "Veolia Consumption",
-    "documentation": "",
+    "version": "0.1.0",
+    "documentation": "https://github.com/McSon2/home-assistant-veolia-addon",
     "dependencies": [],
-    "codeowners": [],
-    "requirements": ["requests"]
+    "codeowners": ["@Mcson2"],
+    "requirements": ["requests", "xmltodict"],
+    "config_flow": false
   }
   
