@@ -3,6 +3,7 @@ import os
 import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
 
+# Récupération des variables d'environnement
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 mqtt_broker = os.getenv("MQTT_BROKER")
@@ -10,7 +11,7 @@ mqtt_port = int(os.getenv("MQTT_PORT"))
 mqtt_username = os.getenv("MQTT_USERNAME")
 mqtt_password = os.getenv("MQTT_PASSWORD")
 
-# Afficher les variables d'environnement pour le débogage
+# Affichage des variables pour le débogage
 print(f"USERNAME: {username}")
 print(f"PASSWORD: {password}")
 print(f"MQTT_BROKER: {mqtt_broker}")
@@ -18,9 +19,11 @@ print(f"MQTT_PORT: {mqtt_port}")
 print(f"MQTT_USERNAME: {mqtt_username}")
 print(f"MQTT_PASSWORD: {mqtt_password}")
 
+# Initialisation du client Veolia
 client = VeoliaClient(email=username, password=password)
 
 def publish_to_mqtt(topic, payload, retain=False):
+    """Publie un message sur MQTT"""
     mqtt_client = mqtt.Client()
     if mqtt_username:
         mqtt_client.username_pw_set(mqtt_username, mqtt_password)
@@ -29,6 +32,7 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.disconnect()
 
 def publish_discovery():
+    """Publie les messages de découverte MQTT pour Home Assistant"""
     unique_id_prefix = "veolia_test_"
     device_name = "Veolia Water Consumption"
     device = {
@@ -62,7 +66,7 @@ def publish_discovery():
         payload = json.dumps(sensor)
         publish_to_mqtt(topic, payload, retain=True)
 
-# Se connecter
+# Connexion au service Veolia et publication des données
 try:
     client.login()
     print("Connexion réussie")
@@ -70,22 +74,20 @@ try:
 except Exception as e:
     print(f"Erreur de connexion: {e}")
 
-# Récupérer les données de consommation journalière
+# Récupération et publication des données de consommation journalière
 try:
     data_daily = client.update(month=False)
     print("Données de consommation journalière :")
-    # print(data_daily)
     data_daily_json = json.dumps({"history": data_daily}, default=str)
     print(data_daily_json)
     publish_to_mqtt("homeassistant/sensor/veolia/daily/state", data_daily_json)
 except Exception as e:
     print(f"Erreur lors de la récupération des données journalières: {e}")
 
-# Récupérer les données de consommation mensuelle
+# Récupération et publication des données de consommation mensuelle
 try:
     data_monthly = client.update(month=True)
     print("Données de consommation mensuelle :")
-    # print(data_monthly)
     data_monthly_json = json.dumps({"history": data_monthly}, default=str)
     print(data_monthly_json)
     publish_to_mqtt("homeassistant/sensor/veolia/monthly/state", data_monthly_json)
