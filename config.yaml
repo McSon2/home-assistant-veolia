@@ -1,16 +1,16 @@
 name: "Veolia Consumption"
-version: "0.0.2"
+version: "0.0.3"
 slug: "veolia_consumption"
-description: "Fetches Veolia consumption data daily."
+description: "Retrieve Veolia water consumption data"
 arch:
   - amd64
   - armv7
-  - aarch64
+  - armhf
 startup: "application"
 boot: "auto"
 options:
-  username: "votre_email"
-  password: "votre_mot_de_passe"
+  username: "your_email@example.com"
+  password: "your_password"
 schema:
   username: "str"
   password: "str"

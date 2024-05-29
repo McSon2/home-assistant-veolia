@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-CONFIG_PATH=/data/options.json
 
-USERNAME=$(jq --raw-output '.username' $CONFIG_PATH)
-PASSWORD=$(jq --raw-output '.password' $CONFIG_PATH)
+# Utilisation de bashio pour récupérer les options de configuration
+USERNAME=$(bashio::config 'username')
+PASSWORD=$(bashio::config 'password')
 
 export USERNAME
 export PASSWORD

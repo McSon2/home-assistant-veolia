@@ -179,14 +179,18 @@ class VeoliaClient:
             {"cptEmail": self._email, "cptPwd": self._pwd},
             anonymous=True,
         )
-        # _LOGGER.debug(f"_get_token_password : {datas.replace(self._pwd,'MySecretPassWord')}")
+        # Afficher les données de la requête
+        _LOGGER.debug(f"Request data: {datas}")
+
         resp = self.session.post(
             self.address,
             headers=self.headers,
             data=datas,
         )
+        # Afficher le statut de la réponse et le corps de la réponse
         _LOGGER.debug(f"Response status: {resp.status_code}")
         _LOGGER.debug(f"Response body: {resp.text}")
+
         if resp.status_code != 200:
             _LOGGER.error("Problem with authentication")
             raise Exception(f"POST /__get_tokenPassword/ {resp.status_code}")
@@ -205,7 +209,7 @@ class VeoliaClient:
                 else:
                     self.__aboId = contrat["aboId"]
             _LOGGER.debug(f"__aboId={self.__aboId}")
-            # _LOGGER.debug(f"__tokenPassword={self.__tokenPassword}")
+
 
     def __create_enveloppe(self):
         """Return enveloppe for requests.
