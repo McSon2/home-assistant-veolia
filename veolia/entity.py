@@ -1,30 +1,51 @@
-from homeassistant.helpers.entity import Entity
+"""VeoliaEntity class."""
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.const import VOLUME_LITERS
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-class VeoliaEntity(Entity):
-    """Base class for Veolia sensors."""
+from .const import ATTRIBUTION, DAILY, DOMAIN, HISTORY, ICON, NAME
 
-    def __init__(self, coordinator, entry):
-        self.coordinator = coordinator
-        self.entry = entry
-        self._state = None
-        self._attributes = {}
+class VeoliaEntity(CoordinatorEntity, SensorEntity):
+    """Representation of a Veolia entity."""
+
+    def __init__(self, coordinator, config_entry):
+        """Initialize the entity."""
+        super().__init__(coordinator)
+        self.config_entry = config_entry
 
     @property
     def unique_id(self):
-        """Return a unique ID."""
-        return f"{self.entry.entry_id}_{self.name}"
+        """Return a unique ID to use for this entity."""
+        return f"{self.config_entry.entry_id}_{self.name}"
 
     @property
-    def extra_state_attributes(self):
-        """Return the state attributes."""
-        return self._attributes
-
-    def _base_extra_state_attributes(self):
-        """Return base state attributes."""
+    def device_info(self):
+        """Return device registry information for this entity."""
         return {
-            "attribution": "Data provided by Veolia",
+            "identifiers": {(DOMAIN, self.config_entry.entry_id)},
+            "manufacturer": NAME,
+            "name": NAME,
         }
 
-    async def async_update(self):
-        """Update the entity."""
-        await self.coordinator.async_request_refresh()
+    @property
+    def device_class(self):
+        """Return the device_class of the sensor."""
+        return SensorDeviceClass.WATER
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit_of_measurement of the sensor."""
+        return VOLUME_LITERS
+
+    @property
+    def icon(self):
+        """Return the icon of the sensor."""
+        return ICON
+
+    def _base_extra_state_attributes(self):
+        """Return the base extra state attributes."""
+        return {
+            "attribution": ATTRIBUTION,
+            "integration": DOMAIN,
+            "last_report": self.coordinator.data[DAILY][HISTORY][0][0],
+        }
