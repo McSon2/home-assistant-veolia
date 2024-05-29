@@ -29,10 +29,9 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.disconnect()
 
 def publish_discovery():
-    unique_id_prefix = "veolia_test_"
     device_name = "Veolia Water Consumption"
     device = {
-        "identifiers": [unique_id_prefix + "water_meter"],
+        "identifiers": ["veolia_water_meter"],
         "name": device_name,
         "model": "Veolia Water Meter",
         "manufacturer": "Veolia"
@@ -40,19 +39,19 @@ def publish_discovery():
 
     discovery_data = [
         {
-            "name": "Veolia Daily Consumption",
-            "state_topic": "homeassistant/sensor/veolia/daily/state",
+            "name": "Daily Consumption",
+            "state_topic": "homeassistant/sensor/veolia_daily/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
-            "unique_id": unique_id_prefix + "daily_consumption",
+            "unique_id": "veolia_daily_consumption",
             "device": device
         },
         {
-            "name": "Veolia Monthly Consumption",
-            "state_topic": "homeassistant/sensor/veolia/monthly/state",
+            "name": "Monthly Consumption",
+            "state_topic": "homeassistant/sensor/veolia_monthly/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
-            "unique_id": unique_id_prefix + "monthly_consumption",
+            "unique_id": "veolia_monthly_consumption",
             "device": device
         }
     ]
@@ -76,7 +75,7 @@ try:
     print("Données de consommation journalière :")
     data_daily_json = json.dumps({"history": data_daily}, default=str)
     print(data_daily_json)
-    publish_to_mqtt("homeassistant/sensor/veolia/daily/state", data_daily_json)
+    publish_to_mqtt("homeassistant/sensor/veolia_daily/state", data_daily_json)
 except Exception as e:
     print(f"Erreur lors de la récupération des données journalières: {e}")
 
@@ -86,6 +85,7 @@ try:
     print("Données de consommation mensuelle :")
     data_monthly_json = json.dumps({"history": data_monthly}, default=str)
     print(data_monthly_json)
-    publish_to_mqtt("homeassistant/sensor/veolia/monthly/state", data_monthly_json)
+    publish_to_mqtt("homeassistant/sensor/veolia_monthly/state", data_monthly_json)
 except Exception as e:
     print(f"Erreur lors de la récupération des données mensuelles: {e}")
+
