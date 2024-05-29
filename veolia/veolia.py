@@ -3,7 +3,7 @@ import os
 import requests
 import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
-from datetime import datetime
+from datetime import datetime, timezone
 
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
@@ -81,21 +81,30 @@ def publish_historical_data_to_hass(data):
         "Content-Type": "application/json",
     }
     stats = []
+    sum_state = 0
     for entry in data:
         timestamp, value = entry
-        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").isoformat()
+        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(tzinfo=timezone.utc).isoformat()
+        sum_state += value
         stat = {
             "start": iso_timestamp,
+            "mean": None,
+            "min": None,
+            "max": None,
+            "last_reset": None,
             "state": value,
-            "sum": value  # Assuming each entry is the total value at that point in time
+            "sum": sum_state
         }
         stats.append(stat)
     
     payload = {
-        "statistic_id": "sensor.veolia_daily_consumption_test",
-        "unit_of_measurement": "L",
-        "source": "recorder",
-        "stats": stats
+        "metadata": {
+            "has_mean": False,
+            "has_sum": True,
+            "statistic_id": "sensor.veolia_daily_consumption_test",
+            "unit_of_measurement": "L"
+        },
+        "statistics": stats
     }
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
