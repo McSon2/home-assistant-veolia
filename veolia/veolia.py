@@ -101,7 +101,7 @@ def publish_historical_data_to_hass(data):
         "metadata": {
             "has_mean": False,
             "has_sum": True,
-            "statistic_id": "sensor.veolia_daily_consumption_test",
+            "statistic_id": "sensor.veolia_test_daily_consumption_test",
             "unit_of_measurement": "L"
         },
         "statistics": stats
