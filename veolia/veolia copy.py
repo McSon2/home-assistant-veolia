@@ -2,7 +2,7 @@ import json
 import os
 import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
-from datetime import date, datetime
+from datetime import datetime
 
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
@@ -45,9 +45,8 @@ def publish_discovery():
             "value_template": "{{ value }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
-            "state_class": "total",
+            "state_class": "total_increasing",
             "device_class": "water",
-            "last_reset": "1970-01-01T00:00:00+00:00",  # Ajout de l'attribut last_reset
             "has_entity_name": True
         },
         {
@@ -74,8 +73,9 @@ def convert_data(data):
 def publish_historical_data(topic, data):
     for entry in data:
         timestamp, value = entry
+        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").isoformat()
         payload = json.dumps({
-            "time": timestamp,
+            "time": iso_timestamp,
             "value": value
         })
         publish_to_mqtt(topic, payload)
@@ -88,7 +88,7 @@ try:
 except Exception as e:
     print(f"Erreur de connexion: {e}")
 
-# Récupérer les données de consommation journalière
+# Récupérer les données de consommation journalière et publier l'historique
 try:
     data_daily = client.update(month=False)
     if data_daily:
@@ -100,20 +100,19 @@ try:
         print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
         # Publier les données historiques
-        publish_historical_data("homeassistant/sensor/veolia_daily_consumption_test/history", data_daily_converted)
+        publish_historical_data("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_converted)
     else:
         print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
     print(f"Erreur lors de la récupération des données journalières: {e}")
 
-# Récupérer les données de consommation mensuelle
+# Récupérer les données de consommation mensuelle sans publier l'historique
 try:
     data_monthly = client.update(month=True)
     if data_monthly:
         print("Données de consommation mensuelle récupérées avec succès")
         print(data_monthly)
-        data_monthly_converted = convert_data(data_monthly["history"])
-        latest_monthly_consumption = data_monthly_converted[0][1]  # Dernière valeur de consommation mensuelle
+        latest_monthly_consumption = data_monthly["history"][0][1]  # Dernière valeur de consommation mensuelle
         data_monthly_json = json.dumps(latest_monthly_consumption)
         print(f"Monthly JSON: {data_monthly_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
