@@ -110,6 +110,7 @@ class VeoliaClient:
             self.address,
             headers=self.headers,
             data=datas,
+            timeout=30
         )
         _LOGGER.debug(str(resp))
         _LOGGER.debug(str(resp.text))
@@ -189,6 +190,7 @@ class VeoliaClient:
             self.address,
             headers=self.headers,
             data=datas,
+            timeout=30
         )
         # Afficher le statut de la réponse et le corps de la réponse
         _LOGGER.debug(f"Response status: {resp.status_code}")
