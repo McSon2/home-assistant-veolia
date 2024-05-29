@@ -38,22 +38,20 @@ def publish_discovery():
 
     discovery_data = [
         {
-            "name": "Veolia Daily Consumption Test",
+            "name": "Daily Consumption Test",
             "state_topic": "homeassistant/sensor/veolia_daily_consumption_test/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_daily_consumption_test",
-            "device": device,
-            "has_entity_name": True
+            "device": device
         },
         {
-            "name": "Veolia Monthly Consumption Test",
+            "name": "Monthly Consumption Test",
             "state_topic": "homeassistant/sensor/veolia_monthly_consumption_test/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_monthly_consumption_test",
-            "device": device,
-            "has_entity_name": True
+            "device": device
         }
     ]
 
