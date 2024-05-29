@@ -88,10 +88,6 @@ def publish_historical_data_to_hass(data):
         sum_state += value
         stat = {
             "start": iso_timestamp,
-            "mean": None,
-            "min": None,
-            "max": None,
-            "last_reset": None,
             "state": value,
             "sum": sum_state
         }
@@ -101,10 +97,12 @@ def publish_historical_data_to_hass(data):
         "metadata": {
             "has_mean": False,
             "has_sum": True,
+            "name": "Veolia Test Daily Consumption",
+            "source": "veolia_test",
             "statistic_id": "sensor.veolia_test_daily_consumption_test",
             "unit_of_measurement": "L"
         },
-        "statistics": stats
+        "stats": stats  # Utiliser "stats" au lieu de "statistics"
     }
     
     # Ajouter des journaux pour examiner le payload envoyé
@@ -117,7 +115,6 @@ def publish_historical_data_to_hass(data):
         print(f"Erreur lors de l'importation des statistiques: {response.status_code} - {response.text}")
     else:
         print("Données historiques importées avec succès")
-
 
 # Se connecter
 try:
