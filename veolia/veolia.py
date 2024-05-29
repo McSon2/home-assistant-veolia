@@ -43,7 +43,8 @@ def publish_discovery():
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_daily_consumption_test",
-            "device": device
+            "device": device,
+            "has_entity_name": True
         },
         {
             "name": "Monthly Consumption Test",
@@ -51,7 +52,8 @@ def publish_discovery():
             "unit_of_measurement": "L",
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_monthly_consumption_test",
-            "device": device
+            "device": device,
+            "has_entity_name": True
         }
     ]
 
