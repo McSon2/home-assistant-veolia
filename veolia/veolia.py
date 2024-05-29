@@ -84,7 +84,7 @@ def publish_historical_data_to_hass(data):
     sum_state = 0
     for entry in data:
         timestamp, value = entry
-        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(tzinfo=timezone.utc).isoformat()
+        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
         sum_state += value
         stat = {
             "start": iso_timestamp,
