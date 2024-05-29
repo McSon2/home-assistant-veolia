@@ -19,4 +19,12 @@ export MQTT_PASSWORD
 export HASS_HOST
 export HASS_TOKEN
 
+# Afficher les variables d'environnement pour le débogage
+echo "USERNAME: $USERNAME"
+echo "PASSWORD: $PASSWORD"
+echo "MQTT_BROKER: $MQTT_BROKER"
+echo "MQTT_PORT: $MQTT_PORT"
+echo "MQTT_USERNAME: $MQTT_USERNAME"
+echo "MQTT_PASSWORD: $MQTT_PASSWORD"
+
 python3 /app/veolia/veolia.py

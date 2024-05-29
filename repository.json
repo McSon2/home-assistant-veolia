@@ -6,6 +6,6 @@
     "description": "Repository for Veolia Consumption Add-on",
     "country": "FR",
     "domain": "homeassistant",
-    "file_version": "0.0.1"
+    "file_version": "0.2.9"
   }
   
