@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Installez les dépendances nécessaires
 RUN apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
-RUN pip install requests xmltodict
+RUN pip install requests xmltodict paho-mqtt
 
 # Donnez la permission d'exécution au script
 RUN chmod +x /app/run.sh

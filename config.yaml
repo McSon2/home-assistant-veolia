@@ -1,5 +1,5 @@
 name: "Veolia Consumption"
-version: "0.1.6"
+version: "0.0.5"
 slug: "veolia_consumption"
 description: "Retrieve Veolia water consumption data"
 arch:
@@ -11,6 +11,14 @@ boot: "auto"
 options:
   username: "your_email@example.com"
   password: "your_password"
+  mqtt_broker: "mqtt://broker"
+  mqtt_port: 1883
+  mqtt_username: ""
+  mqtt_password: ""
 schema:
   username: "str"
   password: "str"
+  mqtt_broker: "str"
+  mqtt_port: "int"
+  mqtt_username: "str?"
+  mqtt_password: "str?"
