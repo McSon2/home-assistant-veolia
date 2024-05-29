@@ -2,9 +2,6 @@ import json
 import os
 from veolia_client import VeoliaClient
 
-os.environ["USERNAME"] = "maximesaltet@gmail.com"
-os.environ["PASSWORD"] = "Happy.Fifi@1994"
-
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 
