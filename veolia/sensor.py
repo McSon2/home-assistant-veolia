@@ -4,6 +4,7 @@ import logging
 from homeassistant.components.sensor import SensorStateClass
 from .const import DAILY, DOMAIN, HISTORY, MONTHLY
 from .entity import VeoliaEntity
+from veolia_client import VeoliaClient
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class VeoliaDailyConsumptionSensor(VeoliaEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "veolia_daily_consumption"
+        return "veolia_daily_consumption_test"
 
     @property
     def state(self):
@@ -78,7 +79,7 @@ class VeoliaMonthlyConsumptionSensor(VeoliaEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "veolia_monthly_consumption"
+        return "veolia_monthly_consumption_test"
 
     @property
     def state(self):
