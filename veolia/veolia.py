@@ -21,7 +21,7 @@ print(f"MQTT_PASSWORD: {mqtt_password}")
 client = VeoliaClient(email=username, password=password)
 
 def publish_to_mqtt(topic, payload, retain=False):
-    mqtt_client = mqtt.Client(mqtt.Client.CallbackAPIVersion.VERSION1)
+    mqtt_client = mqtt.Client()
     if mqtt_username:
         mqtt_client.username_pw_set(mqtt_username, mqtt_password)
     mqtt_client.connect(mqtt_broker, mqtt_port, 60)
