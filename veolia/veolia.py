@@ -44,6 +44,8 @@ def publish_discovery():
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
+            "state_class": "total_increasing",
+            "device_class": "water",
             "has_entity_name": True
         },
         {
@@ -53,6 +55,8 @@ def publish_discovery():
             "value_template": "{{ value_json.history[0][1] }}",
             "unique_id": "veolia_monthly_consumption_test",
             "device": device,
+            "state_class": "total_increasing",
+            "device_class": "water",
             "has_entity_name": True
         }
     ]
