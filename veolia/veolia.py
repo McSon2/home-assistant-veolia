@@ -86,8 +86,8 @@ try:
         print(data_daily)
         data_daily_converted = convert_data(data_daily)
         latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
-        data_daily_json = json.dumps(latest_daily_consumption)
-        print(data_daily_json)
+        data_daily_json = json.dumps({"consumption": latest_daily_consumption})
+        print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
     else:
         print("Aucune donnée de consommation journalière disponible")
@@ -102,8 +102,8 @@ try:
         print(data_monthly)
         data_monthly_converted = convert_data(data_monthly)
         latest_monthly_consumption = data_monthly_converted[0][1]  # Dernière valeur de consommation mensuelle
-        data_monthly_json = json.dumps(latest_monthly_consumption)
-        print(data_monthly_json)
+        data_monthly_json = json.dumps({"consumption": latest_monthly_consumption})
+        print(f"Monthly JSON: {data_monthly_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
     else:
         print("Aucune donnée de consommation mensuelle disponible")
