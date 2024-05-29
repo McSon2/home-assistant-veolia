@@ -15,8 +15,8 @@ options:
   mqtt_port: 1883
   mqtt_username: "mqtt_user"
   mqtt_password: "mqtt_password"
-  hass_host: hass_host
-  hass_token: hass_token
+  hass_host: "hass_host"
+  hass_token: "hass_token"
 schema:
   username: "str"
   password: "str"
@@ -24,5 +24,5 @@ schema:
   mqtt_port: "int"
   mqtt_username: "str"
   mqtt_password: "str"
-  hass_host: hass_host
-  hass_token: hass_token
+  hass_host: "hass_host"
+  hass_token: "hass_token"
