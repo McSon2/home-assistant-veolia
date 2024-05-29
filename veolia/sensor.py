@@ -1,7 +1,7 @@
 import json
 import os
 from homeassistant.helpers.entity import Entity
-from veolia_client import VeoliaClient
+from .veolia_client import VeoliaClient
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     username = os.getenv("USERNAME")
