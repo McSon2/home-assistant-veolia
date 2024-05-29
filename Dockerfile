@@ -9,6 +9,7 @@ COPY config.yaml /app/config.yaml
 WORKDIR /app
 
 # Installez les dépendances nécessaires
+RUN apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
 RUN pip install requests xmltodict
 
 # Donnez la permission d'exécution au script
