@@ -45,7 +45,7 @@ def publish_discovery():
             "value_template": "{{ value }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
-            "state_class": "total_increasing",
+            "state_class": "measurement",
             "device_class": "water",
             "has_entity_name": True
         },
@@ -67,6 +67,18 @@ def publish_discovery():
         payload = json.dumps(sensor)
         publish_to_mqtt(topic, payload, retain=True)
 
+def convert_data(data):
+    return [(str(entry[0]), entry[1]) for entry in data]
+
+def publish_historical_data(topic, data):
+    for entry in data:
+        timestamp, value = entry
+        payload = json.dumps({
+            "time": timestamp,
+            "value": value
+        })
+        publish_to_mqtt(topic, payload)
+
 # Se connecter
 try:
     client.login()
@@ -81,10 +93,13 @@ try:
     if data_daily:
         print("Données de consommation journalière récupérées avec succès")
         print(data_daily)
-        latest_daily_consumption = data_daily["history"][0][1]  # Dernière valeur de consommation journalière
+        data_daily_converted = convert_data(data_daily["history"])
+        latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
         data_daily_json = json.dumps(latest_daily_consumption)
         print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
+        # Publier les données historiques
+        publish_historical_data("homeassistant/sensor/veolia_daily_consumption_test/history", data_daily_converted)
     else:
         print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
@@ -96,7 +111,8 @@ try:
     if data_monthly:
         print("Données de consommation mensuelle récupérées avec succès")
         print(data_monthly)
-        latest_monthly_consumption = data_monthly["history"][0][1]  # Dernière valeur de consommation mensuelle
+        data_monthly_converted = convert_data(data_monthly["history"])
+        latest_monthly_consumption = data_monthly_converted[0][1]  # Dernière valeur de consommation mensuelle
         data_monthly_json = json.dumps(latest_monthly_consumption)
         print(f"Monthly JSON: {data_monthly_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
