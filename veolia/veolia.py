@@ -77,21 +77,29 @@ except Exception as e:
 # Récupérer les données de consommation journalière
 try:
     data_daily = client.update(month=False)
-    print("Données de consommation journalière :")
-    latest_daily_consumption = data_daily[0][1]  # Dernière valeur de consommation journalière
-    data_daily_json = json.dumps(latest_daily_consumption)
-    print(data_daily_json)
-    publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
+    if data_daily:
+        print("Données de consommation journalière récupérées avec succès")
+        print(data_daily)
+        latest_daily_consumption = data_daily[0][1]  # Dernière valeur de consommation journalière
+        data_daily_json = json.dumps(latest_daily_consumption)
+        print(data_daily_json)
+        publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
+    else:
+        print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
     print(f"Erreur lors de la récupération des données journalières: {e}")
 
 # Récupérer les données de consommation mensuelle
 try:
     data_monthly = client.update(month=True)
-    print("Données de consommation mensuelle :")
-    latest_monthly_consumption = data_monthly[0][1]  # Dernière valeur de consommation mensuelle
-    data_monthly_json = json.dumps(latest_monthly_consumption)
-    print(data_monthly_json)
-    publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
+    if data_monthly:
+        print("Données de consommation mensuelle récupérées avec succès")
+        print(data_monthly)
+        latest_monthly_consumption = data_monthly[0][1]  # Dernière valeur de consommation mensuelle
+        data_monthly_json = json.dumps(latest_monthly_consumption)
+        print(data_monthly_json)
+        publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
+    else:
+        print("Aucune donnée de consommation mensuelle disponible")
 except Exception as e:
     print(f"Erreur lors de la récupération des données mensuelles: {e}")
