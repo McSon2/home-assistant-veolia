@@ -29,9 +29,9 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.disconnect()
 
 def publish_discovery():
-    device_name = "Veolia Water Meter Test"
+    device_name = "Veolia Test"
     device = {
-        "identifiers": ["veolia_water_meter_test"],
+        "identifiers": ["veolia_test"],
         "name": device_name,
         "model": "Veolia Water Meter",
         "manufacturer": "Veolia"
