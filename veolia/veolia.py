@@ -45,8 +45,9 @@ def publish_discovery():
             "value_template": "{{ value }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
-            "state_class": "measurement",
+            "state_class": "total",
             "device_class": "water",
+            "last_reset": "1970-01-01T00:00:00+00:00",  # Ajout de l'attribut last_reset
             "has_entity_name": True
         },
         {
