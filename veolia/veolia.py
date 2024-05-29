@@ -41,7 +41,7 @@ def publish_discovery():
             "name": "Daily Consumption Test",
             "state_topic": "homeassistant/sensor/veolia_daily_consumption_test/state",
             "unit_of_measurement": "L",
-            "value_template": "{{ value_json.history[0][1] }}",
+            "value_template": "{{ value }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
             "state_class": "total_increasing",
@@ -52,7 +52,7 @@ def publish_discovery():
             "name": "Monthly Consumption Test",
             "state_topic": "homeassistant/sensor/veolia_monthly_consumption_test/state",
             "unit_of_measurement": "L",
-            "value_template": "{{ value_json.history[0][1] }}",
+            "value_template": "{{ value }}",
             "unique_id": "veolia_monthly_consumption_test",
             "device": device,
             "state_class": "total_increasing",
@@ -78,7 +78,8 @@ except Exception as e:
 try:
     data_daily = client.update(month=False)
     print("Données de consommation journalière :")
-    data_daily_json = json.dumps({"history": data_daily}, default=str)
+    latest_daily_consumption = data_daily[0][1]  # Dernière valeur de consommation journalière
+    data_daily_json = json.dumps(latest_daily_consumption)
     print(data_daily_json)
     publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
 except Exception as e:
@@ -88,7 +89,8 @@ except Exception as e:
 try:
     data_monthly = client.update(month=True)
     print("Données de consommation mensuelle :")
-    data_monthly_json = json.dumps({"history": data_monthly}, default=str)
+    latest_monthly_consumption = data_monthly[0][1]  # Dernière valeur de consommation mensuelle
+    data_monthly_json = json.dumps(latest_monthly_consumption)
     print(data_monthly_json)
     publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
 except Exception as e:
