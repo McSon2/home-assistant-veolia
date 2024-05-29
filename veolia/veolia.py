@@ -106,12 +106,18 @@ def publish_historical_data_to_hass(data):
         },
         "statistics": stats
     }
+    
+    # Ajouter des journaux pour examiner le payload envoyé
+    print("Payload envoyé à Home Assistant:")
+    print(json.dumps(payload, indent=2))
+    
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
         print(f"Erreur lors de l'importation des statistiques: {response.status_code} - {response.text}")
     else:
         print("Données historiques importées avec succès")
+
 
 # Se connecter
 try:
