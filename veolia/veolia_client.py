@@ -47,7 +47,7 @@ class VeoliaClient:
         self.__enveloppe = self.__create_enveloppe()
 
         # Debugging: print the email and password
-        print(f"VeoliaClient initialized with email: {self._email} and password: {self._pwd}")
+        #print(f"VeoliaClient initialized with email: {self._email} and password: {self._pwd}")
 
     def login(self):
         """Check if login is right.
