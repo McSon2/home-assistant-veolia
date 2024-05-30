@@ -1,5 +1,5 @@
 name: "Veolia Consumption"
-version: "1.0.1"
+version: "1.0.2"
 slug: "veolia_consumption"
 description: "Retrieve Veolia water consumption data"
 arch:
@@ -19,10 +19,10 @@ options:
   hass_token: "your_long_lived_access_token"
 schema:
   username: "str"
-  password: "str"
+  password: "password"
   mqtt_broker: "str"
   mqtt_port: "int"
   mqtt_username: "str"
-  mqtt_password: "str"
+  mqtt_password: "password"
   hass_host: "str"
-  hass_token: "str"
+  hass_token: "password"
