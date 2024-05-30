@@ -1,6 +1,5 @@
 import json
 import os
-import requests
 import paho.mqtt.client as mqtt
 from veolia_client import VeoliaClient
 from datetime import datetime, timezone
@@ -11,18 +10,6 @@ mqtt_broker = os.getenv("MQTT_BROKER")
 mqtt_port = int(os.getenv("MQTT_PORT"))
 mqtt_username = os.getenv("MQTT_USERNAME")
 mqtt_password = os.getenv("MQTT_PASSWORD")
-hass_host = os.getenv("HASS_HOST")
-hass_token = os.getenv("HASS_TOKEN")
-
-# Afficher les variables d'environnement pour le débogage
-print(f"USERNAME: {username}")
-print(f"PASSWORD: {password}")
-print(f"MQTT_BROKER: {mqtt_broker}")
-print(f"MQTT_PORT: {mqtt_port}")
-print(f"MQTT_USERNAME: {mqtt_username}")
-print(f"MQTT_PASSWORD: {mqtt_password}")
-print(f"HASS_HOST: {hass_host}")
-print(f"HASS_TOKEN: {hass_token}")
 
 client = VeoliaClient(email=username, password=password)
 
@@ -75,47 +62,6 @@ def publish_discovery():
 def convert_data(data):
     return [(str(entry[0]), entry[1]) for entry in data]
 
-def publish_historical_data_to_hass(data):
-    headers = {
-        "Authorization": f"Bearer {hass_token}",
-        "Content-Type": "application/json",
-    }
-    stats = []
-    sum_state = 0
-    for entry in data:
-        timestamp, value = entry
-        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
-        sum_state += value
-        stat = {
-            "start": iso_timestamp,
-            "state": value,
-            "sum": sum_state
-        }
-        stats.append(stat)
-
-    payload = {
-        "metadata": {
-            "has_mean": False,
-            "has_sum": True,
-            "name": "Veolia Test Daily Consumption",
-            "source": "veolia_test",
-            "statistic_id": "sensor.veolia_test_daily_consumption_test",
-            "unit_of_measurement": "L"
-        },
-        "stats": stats  # Use "stats" instead of "statistics"
-    }
-
-    # Add logs to examine the payload sent
-    print("Payload sent to Home Assistant:")
-    print(json.dumps(payload, indent=2))
-
-    url = f"{hass_host}/api/services/recorder/import_statistics"
-    response = requests.post(url, headers=headers, json=payload)
-    if response.status_code != 200:
-        print(f"Error importing statistics: {response.status_code} - {response.text}")
-    else:
-        print("Historical data imported successfully")
-
 # Se connecter
 try:
     client.login()
@@ -135,8 +81,12 @@ try:
         data_daily_json = json.dumps(latest_daily_consumption)
         print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
-        # Publier les données historiques via l'API de Home Assistant
-        publish_historical_data_to_hass(data_daily_converted)
+        # Publier les données historiques via MQTT
+        for entry in data_daily_converted:
+            timestamp, value = entry
+            topic = f"homeassistant/sensor/veolia_daily_consumption_test/history/{timestamp}"
+            payload = json.dumps(value)
+            publish_to_mqtt(topic, payload)
     else:
         print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
