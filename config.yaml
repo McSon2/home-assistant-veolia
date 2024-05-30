@@ -1,5 +1,5 @@
 name: "Veolia Consumption"
-version: "1.0.3"
+version: "1.0.4"
 slug: "veolia_consumption"
 description: "Retrieve Veolia water consumption data"
 arch:
