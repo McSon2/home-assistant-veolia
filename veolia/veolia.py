@@ -23,6 +23,7 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.connect(mqtt_broker, mqtt_port, 60)
     mqtt_client.publish(topic, payload, retain=retain)
     mqtt_client.disconnect()
+    print(f"Published to MQTT topic {topic}: {payload}")
 
 def publish_discovery():
     device = {
@@ -99,6 +100,7 @@ def import_statistics(data):
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
         print(f"Error importing statistics: {response.status_code} - {response.text}")
+        print(f"Payload: {json.dumps(payload, indent=2)}")
     else:
         print("Historical data imported successfully")
 
