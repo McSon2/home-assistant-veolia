@@ -72,6 +72,7 @@ def import_statistics(data):
         "Content-Type": "application/json",
     }
     stats = []
+    sum_state = 0
     for entry in data:
         timestamp, value = entry
         iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
