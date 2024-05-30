@@ -106,8 +106,7 @@ def publish_historical_data_to_hass(data):
     }
     
     # Ajouter des journaux pour examiner le payload envoyé
-    print("Payload envoyé à Home Assistant:")
-    print(json.dumps(payload, indent=2))
+    print("Payload envoyé à Home Assistant")
     
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
