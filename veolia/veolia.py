@@ -155,7 +155,7 @@ try:
         latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
         data_daily_json = json.dumps(latest_daily_consumption)
         publish_to_mqtt("homeassistant/sensor/veolia_consumption_daily/state", data_daily_json)
-        import_statistics(data_daily_converted, "sensor.veolia_consumption_daily", "Daily Consumption")
+        import_statistics(data_daily_converted, "sensor.veolia_daily_consumption", "Daily Consumption")
     else:
         print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
