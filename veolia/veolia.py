@@ -27,30 +27,30 @@ def publish_to_mqtt(topic, payload, retain=False):
 
 def publish_discovery():
     device = {
-        "identifiers": ["veolia_test"],
-        "name": "Veolia Test",
+        "identifiers": ["veolia"],
+        "name": "Veolia",
         "model": "Veolia Water Meter",
         "manufacturer": "Veolia"
     }
 
     discovery_data = [
         {
-            "name": "Daily Consumption Test",
-            "state_topic": "homeassistant/sensor/veolia_daily_consumption_test/state",
+            "name": "Daily Consumption",
+            "state_topic": "homeassistant/sensor/veolia_daily_consumption/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value }}",
-            "unique_id": "veolia_daily_consumption_test",
+            "unique_id": "veolia_daily_consumption",
             "device": device,
             "state_class": "total_increasing",
             "device_class": "water",
             "has_entity_name": True
         },
         {
-            "name": "Monthly Consumption Test",
-            "state_topic": "homeassistant/sensor/veolia_monthly_consumption_test/state",
+            "name": "Monthly Consumption",
+            "state_topic": "homeassistant/sensor/veolia_monthly_consumption/state",
             "unit_of_measurement": "L",
             "value_template": "{{ value }}",
-            "unique_id": "veolia_monthly_consumption_test",
+            "unique_id": "veolia_monthly_consumption",
             "device": device,
             "state_class": "total_increasing",
             "device_class": "water",
@@ -104,7 +104,7 @@ def import_statistics(data):
         "has_sum": True,
         "name": "Veolia Test Daily Consumption",
         "source": "recorder",
-        "statistic_id": "sensor.veolia_test_daily_consumption_test",
+        "statistic_id": "sensor.veolia_daily_consumption",
         "unit_of_measurement": "L",
         "stats": stats
     }
@@ -159,7 +159,7 @@ try:
         latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
         data_daily_json = json.dumps(latest_daily_consumption)
         #print(f"Daily JSON: {data_daily_json}")
-        publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
+        publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption/state", data_daily_json)
         # Import long-term statistics for the daily consumption sensor
         import_statistics(data_daily_converted)
     else:
@@ -176,7 +176,7 @@ try:
         latest_monthly_consumption = data_monthly["history"][0][1]  # Dernière valeur de consommation mensuelle
         data_monthly_json = json.dumps(latest_monthly_consumption)
         #print(f"Monthly JSON: {data_monthly_json}")
-        publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
+        publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption/state", data_monthly_json)
     else:
         print("Aucune donnée de consommation mensuelle disponible")
 except Exception as e:
