@@ -39,6 +39,10 @@ calculate_sleep_duration() {
     sleep_duration=$((target_time - current_time))
 }
 
+# Exécuter le script Python immédiatement au démarrage
+python3 /app/veolia/veolia.py
+echo "Script exécuté immédiatement au démarrage à $(date)"
+
 # Boucle infinie pour exécuter le script Python à 17h36 chaque jour
 while true; do
     calculate_sleep_duration
