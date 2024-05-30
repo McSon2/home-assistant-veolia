@@ -73,16 +73,19 @@ def import_statistics(data):
     }
     stats = []
     sum_state = 0
+    prev_value = 0
     for entry in data:
         timestamp, value = entry
         iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
-        sum_state += value
+        state = value - prev_value
+        sum_state += state
         stat = {
             "start": iso_timestamp,
-            "state": value,
+            "state": state,
             "sum": sum_state
         }
         stats.append(stat)
+        prev_value = value
 
     payload = {
         "has_mean": False,
