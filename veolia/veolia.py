@@ -126,6 +126,21 @@ def validate_data(data):
         validated_data.append((timestamp, value))
     return validated_data
 
+# Vérifier les données manquantes et les remplir si nécessaire
+def fill_missing_data(data):
+    filled_data = []
+    current_date = data[0][0]
+    end_date = data[-1][0]
+
+    data_dict = {entry[0]: entry[1] for entry in data}
+
+    while current_date <= end_date:
+        value = data_dict.get(current_date, 0)
+        filled_data.append((current_date, value))
+        current_date += datetime.timedelta(days=1)
+
+    return filled_data
+
 # Se connecter
 try:
     client.login()
