@@ -77,15 +77,15 @@ def import_statistics(data):
     for entry in data:
         timestamp, value = entry
         iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
-        state = value - prev_value
-        sum_state += state
+        sum_state += value
+        state = sum_state - prev_value
         stat = {
             "start": iso_timestamp,
             "state": state,
             "sum": sum_state
         }
         stats.append(stat)
-        prev_value = value
+        prev_value = sum_state
 
     payload = {
         "has_mean": False,
@@ -118,7 +118,7 @@ try:
     data_daily = client.update(month=False)
     if data_daily:
         print("Données de consommation journalière récupérées avec succès")
-        print(data_daily)
+        #print(data_daily)
         data_daily_converted = convert_data(data_daily["history"])
         latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
         data_daily_json = json.dumps(latest_daily_consumption)
@@ -136,7 +136,7 @@ try:
     data_monthly = client.update(month=True)
     if data_monthly:
         print("Données de consommation mensuelle récupérées avec succès")
-        print(data_monthly)
+        #print(data_monthly)
         latest_monthly_consumption = data_monthly["history"][0][1]  # Dernière valeur de consommation mensuelle
         data_monthly_json = json.dumps(latest_monthly_consumption)
         #print(f"Monthly JSON: {data_monthly_json}")
