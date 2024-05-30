@@ -85,14 +85,12 @@ def import_statistics(data):
         stats.append(stat)
 
     payload = {
-        "metadata": {
-            "has_mean": False,
-            "has_sum": True,
-            "name": "Veolia Test Daily Consumption",
-            "source": "veolia_test",
-            "statistic_id": "sensor.veolia_test_daily_consumption_test",
-            "unit_of_measurement": "L"
-        },
+        "has_mean": False,
+        "has_sum": True,
+        "name": "Veolia Test Daily Consumption",
+        "source": "veolia_test",
+        "statistic_id": "sensor.veolia_test_daily_consumption_test",
+        "unit_of_measurement": "L",
         "stats": stats
     }
 
