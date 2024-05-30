@@ -116,6 +116,16 @@ def import_statistics(data):
     else:
         print("Historical data imported successfully")
 
+# Ajouter des vérifications pour s'assurer que les données sont cohérentes
+def validate_data(data):
+    validated_data = []
+    for entry in data:
+        timestamp, value = entry
+        if value < 0:
+            value = 0  # Eviter les valeurs négatives
+        validated_data.append((timestamp, value))
+    return validated_data
+
 # Se connecter
 try:
     client.login()
