@@ -100,7 +100,7 @@ def import_statistics(data):
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
-        print(f"Payload: {json.dumps(payload, indent=2)}")
+        #print(f"Payload: {json.dumps(payload, indent=2)}")
         print(f"Error importing statistics: {response.status_code} - {response.text}")
     else:
         print("Historical data imported successfully")
