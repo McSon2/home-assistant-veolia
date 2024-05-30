@@ -84,6 +84,8 @@ try:
         # Publier les données historiques via MQTT
         for entry in data_daily_converted:
             timestamp, value = entry
+            # Set the timestamp to the end of the day
+            timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=23, minute=59, second=59).isoformat(timespec='seconds')
             topic = f"homeassistant/sensor/veolia_daily_consumption_test/history/{timestamp}"
             payload = json.dumps(value)
             publish_to_mqtt(topic, payload)
