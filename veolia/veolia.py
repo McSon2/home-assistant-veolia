@@ -73,19 +73,27 @@ def import_statistics(data):
     }
     stats = []
     sum_state = 0
-    prev_value = 0
-    for entry in data:
+
+    # Trier les données par date
+    data.sort(key=lambda x: x[0])
+
+    for i, entry in enumerate(data):
         timestamp, value = entry
-        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
+        iso_timestamp = datetime.strptime(str(timestamp), "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
+        
+        # Calculer le sum_state et le state
         sum_state += value
-        state = sum_state - prev_value
+        if i == 0:
+            state = value
+        else:
+            state = value
+        
         stat = {
             "start": iso_timestamp,
             "state": state,
             "sum": sum_state
         }
         stats.append(stat)
-        prev_value = sum_state
 
     payload = {
         "has_mean": False,
@@ -100,7 +108,6 @@ def import_statistics(data):
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
-        #print(f"Payload: {json.dumps(payload, indent=2)}")
         print(f"Error importing statistics: {response.status_code} - {response.text}")
     else:
         print("Historical data imported successfully")
