@@ -29,4 +29,21 @@ export HASS_TOKEN
 #echo "HASS_HOST: $HASS_HOST"
 #echo "HASS_TOKEN: $HASS_TOKEN"
 
-python3 /app/veolia/veolia.py
+# Fonction pour calculer le temps jusqu'à la prochaine exécution à 17h36
+calculate_sleep_duration() {
+    current_time=$(date +%s)
+    target_time=$(date -d "17:36:00" +%s)
+    if [ "$current_time" -gt "$target_time" ]; then
+        target_time=$((target_time + 24 * 60 * 60))
+    fi
+    sleep_duration=$((target_time - current_time))
+}
+
+# Boucle infinie pour exécuter le script Python à 17h36 chaque jour
+while true; do
+    calculate_sleep_duration
+    echo "Sleeping for $sleep_duration seconds until 17:36..."
+    sleep $sleep_duration
+    python3 /app/veolia/veolia.py
+    echo "Script exécuté à $(date)"
+done
