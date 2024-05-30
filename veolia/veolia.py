@@ -50,7 +50,7 @@ def publish_discovery():
             "value_template": "{{ value }}",
             "unique_id": "veolia_daily_consumption_test",
             "device": device,
-            "state_class": "measurement",
+            "state_class": "total_increasing",
             "device_class": "water",
             "has_entity_name": True
         },
@@ -61,7 +61,7 @@ def publish_discovery():
             "value_template": "{{ value }}",
             "unique_id": "veolia_monthly_consumption_test",
             "device": device,
-            "state_class": "measurement",
+            "state_class": "total_increasing",
             "device_class": "water",
             "has_entity_name": True
         }
@@ -92,7 +92,7 @@ def publish_historical_data_to_hass(data):
             "sum": sum_state
         }
         stats.append(stat)
-    
+
     payload = {
         "metadata": {
             "has_mean": False,
@@ -102,18 +102,19 @@ def publish_historical_data_to_hass(data):
             "statistic_id": "sensor.veolia_test_daily_consumption_test",
             "unit_of_measurement": "L"
         },
-        "stats": stats  # Utiliser "stats" au lieu de "statistics"
+        "stats": stats  # Use "stats" instead of "statistics"
     }
-    
-    # Ajouter des journaux pour examiner le payload envoyé
-    print("Payload envoyé à Home Assistant")
-    
+
+    # Add logs to examine the payload sent
+    print("Payload sent to Home Assistant:")
+    print(json.dumps(payload, indent=2))
+
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
-        print(f"Erreur lors de l'importation des statistiques: {response.status_code} - {response.text}")
+        print(f"Error importing statistics: {response.status_code} - {response.text}")
     else:
-        print("Données historiques importées avec succès")
+        print("Historical data imported successfully")
 
 # Se connecter
 try:
