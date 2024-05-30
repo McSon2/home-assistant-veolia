@@ -88,6 +88,10 @@ def import_statistics(data):
         else:
             state = value
         
+        # Ajouter une vérification pour éviter les valeurs négatives
+        if state < 0:
+            state = 0
+
         stat = {
             "start": iso_timestamp,
             "state": state,

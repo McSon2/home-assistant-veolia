@@ -23,7 +23,7 @@ def publish_to_mqtt(topic, payload, retain=False):
     mqtt_client.connect(mqtt_broker, mqtt_port, 60)
     mqtt_client.publish(topic, payload, retain=retain)
     mqtt_client.disconnect()
-    print(f"Published to MQTT topic {topic}: {payload}")
+    #print(f"Published to MQTT topic {topic}: {payload}")
 
 def publish_discovery():
     device = {
@@ -73,13 +73,24 @@ def import_statistics(data):
     }
     stats = []
     sum_state = 0
-    for entry in data:
+
+    # Trier les données par date
+    data.sort(key=lambda x: x[0])
+
+    for i, entry in enumerate(data):
         timestamp, value = entry
-        iso_timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
+        iso_timestamp = datetime.strptime(str(timestamp), "%Y-%m-%d").replace(hour=6, minute=0, second=0).replace(tzinfo=timezone.utc).isoformat(timespec='seconds')
+        
+        # Calculer le sum_state et le state
         sum_state += value
+        if i == 0:
+            state = value
+        else:
+            state = value
+        
         stat = {
             "start": iso_timestamp,
-            "state": value,
+            "state": state,
             "sum": sum_state
         }
         stats.append(stat)
@@ -97,7 +108,6 @@ def import_statistics(data):
     url = f"{hass_host}/api/services/recorder/import_statistics"
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 200:
-        print(f"Payload: {json.dumps(payload, indent=2)}")
         print(f"Error importing statistics: {response.status_code} - {response.text}")
     else:
         print("Historical data imported successfully")
@@ -115,11 +125,11 @@ try:
     data_daily = client.update(month=False)
     if data_daily:
         print("Données de consommation journalière récupérées avec succès")
-        print(data_daily)
+        #print(data_daily)
         data_daily_converted = convert_data(data_daily["history"])
         latest_daily_consumption = data_daily_converted[0][1]  # Dernière valeur de consommation journalière
         data_daily_json = json.dumps(latest_daily_consumption)
-        print(f"Daily JSON: {data_daily_json}")
+        #print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
         # Import long-term statistics for the daily consumption sensor
         import_statistics(data_daily_converted)
@@ -133,10 +143,10 @@ try:
     data_monthly = client.update(month=True)
     if data_monthly:
         print("Données de consommation mensuelle récupérées avec succès")
-        print(data_monthly)
+        #print(data_monthly)
         latest_monthly_consumption = data_monthly["history"][0][1]  # Dernière valeur de consommation mensuelle
         data_monthly_json = json.dumps(latest_monthly_consumption)
-        print(f"Monthly JSON: {data_monthly_json}")
+        #print(f"Monthly JSON: {data_monthly_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_monthly_consumption_test/state", data_monthly_json)
     else:
         print("Aucune donnée de consommation mensuelle disponible")
