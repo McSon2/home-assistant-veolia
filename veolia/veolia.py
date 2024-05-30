@@ -88,7 +88,7 @@ def import_statistics(data):
         "has_mean": False,
         "has_sum": True,
         "name": "Veolia Test Daily Consumption",
-        "source": "custom",
+        "source": "recorder",
         "statistic_id": "sensor.veolia_test_daily_consumption_test",
         "unit_of_measurement": "L",
         "stats": stats
