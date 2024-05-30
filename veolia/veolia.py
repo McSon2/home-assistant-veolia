@@ -82,13 +82,15 @@ try:
         print(f"Daily JSON: {data_daily_json}")
         publish_to_mqtt("homeassistant/sensor/veolia_daily_consumption_test/state", data_daily_json)
         # Publier les données historiques via MQTT
+        # Publier les données historiques via MQTT
         for entry in data_daily_converted:
             timestamp, value = entry
-            # Set the timestamp to the end of the day
-            timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=23, minute=59, second=59).isoformat(timespec='seconds')
+            # Set the timestamp to 06:00:00 for the corresponding date
+            timestamp = datetime.strptime(timestamp, "%Y-%m-%d").replace(hour=6, minute=0, second=0).isoformat(timespec='seconds')
             topic = f"homeassistant/sensor/veolia_daily_consumption_test/history/{timestamp}"
             payload = json.dumps(value)
             publish_to_mqtt(topic, payload)
+
     else:
         print("Aucune donnée de consommation journalière disponible")
 except Exception as e:
